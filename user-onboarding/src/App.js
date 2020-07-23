@@ -11,7 +11,7 @@ const intitalFormValues = {
   email: "",
   password: "",
   confirmPassword: "",
-  termsOfService: "",
+  termsOfService: false,
 };
 
 const initialFormErrors = {
@@ -19,14 +19,13 @@ const initialFormErrors = {
   email: "",
   password: "",
   confirmPassword: "",
-  termsOfService: "",
 };
 
 const initialUsers = [];
 const initialDisabled = true;
 
 export default function App() {
-  const [users, setUsers] = useState([initialUsers]);
+  const [users, setUsers] = useState(initialUsers);
   const [formValues, setFormValues] = useState(intitalFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(initialDisabled);
@@ -35,6 +34,7 @@ export default function App() {
     axios
       .post("https://reqres.in/api/users", newUser)
       .then((res) => {
+        console.log(res);
         setUsers([res.data, ...users]);
         setFormValues(intitalFormValues);
       })
@@ -44,20 +44,38 @@ export default function App() {
   ///// FORM ACTIONS//////////
 
   const inputChange = (name, value) => {
+    // console.log({ name, value });
     yup
       .reach(formSchema, name)
       .validate(value)
       .then((valid) => {
+        // console.log({ valid });
         setFormErrors({
           ...formErrors,
           [name]: "",
         });
       })
       .catch((err) => {
-        setFormErrors({
-          ...formErrors,
-          [name]: err.errors[0],
-        });
+        // console.log("Error", name, value, { curr: formValues.password });
+        if (name === "confirmPassword" && formValues.password !== value) {
+          setFormErrors({ //
+            ...formErrors,
+            [name]: err.errors[0],
+          });
+        } else if (
+          name === "confirmPassword" &&
+          formValues.password === value
+        ) {
+          setFormErrors({
+            ...formErrors,
+            [name]: "",
+          });
+        } else if (name !== "confirmPassword") {
+          setFormErrors({
+            ...formErrors,
+            [name]: err.errors[0],
+          });
+        }
       });
 
     setFormValues({
@@ -67,12 +85,10 @@ export default function App() {
   };
 
   const checkboxChange = (name, isChecked) => {
+    console.log({ isChecked });
     setFormValues({
       ...formValues,
-      termsOfService: {
-        ...formValues.termsOfService,
-        [name]: isChecked,
-      },
+      [name]: isChecked,
     });
   };
   const submit = () => {
@@ -81,9 +97,7 @@ export default function App() {
       email: formValues.email.trim(),
       password: formValues.password.trim(),
       confirmPassword: formValues.confirmPassword.trim(),
-      termsOfService: Object.keys(formValues.termsOfService).filter(
-        (tob) => formValues.termsOfService[tob]
-      ),
+      termsOfService: formValues.termsOfService,
     };
     postNewUsers(newUser);
   };
@@ -94,6 +108,7 @@ export default function App() {
     });
   }, [formValues]);
 
+  console.log({ users });
   return (
     <div className="App">
       <header>
@@ -108,7 +123,8 @@ export default function App() {
         errors={formErrors}
       />
       {users.map((user) => {
-        return <User data={user} />;
+        console.log("User", user);
+        return <User data={user} key={user.id} />;
       })}
     </div>
   );

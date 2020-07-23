@@ -17,13 +17,14 @@ export default function Form(props) {
 
   const onCheckboxChange = (evt) => {
     const { name, checked } = evt.target;
+    console.log({ name, checked });
     checkboxChange(name, checked);
   };
   const onInputChange = (evt) => {
     const { name, value } = evt.target;
     inputChange(name, value);
   };
-
+  console.log({ check: values.termsOfService });
   return (
     <form className="form container" onSubmit={onSubmit}>
       <div className="form-group submit">
@@ -68,9 +69,9 @@ export default function Form(props) {
           <input
             value={values.confirmPassword}
             onChange={onInputChange}
-            id="passwordInput"
-            name="confirm-password"
-            type="confirm-password"
+            id="passwordConfirmInput"
+            name="confirmPassword"
+            type="password"
             placeholder="Re-Enter password"
             maxLength="10"
           />
@@ -80,13 +81,13 @@ export default function Form(props) {
           Terms of Service
           <input
             type="checkbox"
-            name="terms"
-            checked={values.termsOfService === true}
+            name="termsOfService"
+            id="termsOfService"
+            checked={values.termsOfService}
             onChange={onCheckboxChange}
           />
         </label>
         <div className="form-group submit">
-          <button disabled={disabled}>Submit</button>
           <div className="errors">
             <div>{errors.username}</div>
             <div>{errors.email}</div>
@@ -94,6 +95,17 @@ export default function Form(props) {
             <div>{errors.confirmPassword}</div>
             <div>{errors.termsOfService}</div>
           </div>
+          {!disabled && ( // this disabled  the button and only shows when everythign is filled out
+            <button
+              id="submitBtn"
+              disabled={disabled}
+              // style={
+              //   disabled ? { borderColor: "grey" } : { borderColor: "orange" }
+              // }
+            >
+              Submit
+            </button>
+          )}
         </div>
       </div>
     </form>

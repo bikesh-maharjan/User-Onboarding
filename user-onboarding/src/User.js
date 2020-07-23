@@ -1,13 +1,17 @@
-import React from 'react'
+import React from "react";
 
-export default function User(data) {
-    if (!data) {
-        return <h2>Sorry , we're working on it!</h2>
-    }
+export default function User(props) {
+  const { data } = props;
+  if (!data || !data.username) {
+    return <h2>Sorry , we're working on it!</h2>;
+  }
 
-    return (
-        <div className='user-container'>
-            <h2>{data.name}</h2>
-        </div>
-    )
+  console.log(data);
+
+  return (
+    <div className="user-container">
+      <h2>{data.username}</h2>
+      <p>{data.email}</p>
+    </div>
+  );
 }
