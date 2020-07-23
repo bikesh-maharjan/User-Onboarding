@@ -1,0 +1,43 @@
+.App {
+  border: 1px solid rgb(210, 210, 210);
+  border-radius: 10px;
+  box-shadow: 0px 1px 6px -2px rgb(128, 127, 127);
+  margin: 16px 8px;
+  padding: 16px;
+  background-color: white;
+  text-align: center;
+  color: seagreen;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: orange;
+}
+
+label {
+  display: flex;
+  margin-bottom: 12px;
+  justify-content: space-between;
+}
+
+input[type="text"],
+select {
+  height: 1.2rem;
+}
+
+button {
+  color: orange;
+  background-color: white;
+  height: 1.5rem;
+  width: 6rem;
+  border-radius: 8px;
+  border: 1px solid orange;
+}
